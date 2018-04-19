@@ -9,6 +9,9 @@ import { store } from './store'
 import axios from 'axios'
 import lodash from 'lodash'
 import Chart from 'chart.js'
+import FullCalendar from 'vue-full-calendar'
+
+import "fullcalendar/dist/fullcalendar.min.css";
 
 window.axios = axios
 window._ = lodash
@@ -16,6 +19,7 @@ window._ = lodash
 window.host = 'http://localhost:8000/api'
 
 Vue.use(Vuetify)
+Vue.use(FullCalendar)
 
 Vue.config.productionTip = false
 

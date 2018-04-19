@@ -5,7 +5,7 @@ export default (to, from, next) => {
 
     if (token !== null && token !== 'undefined') {
         store.dispatch('autoSignIn', token)
-        next('/dashboard')
+        //next('/dashboard')
     } else {
         next()
     }

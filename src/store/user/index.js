@@ -18,16 +18,8 @@ export default {
         }
     },
     mutations: {
-        setUserToken (state, payload) {
-            state.user.token = payload
-        },
         setUser (state, payload) {
-            state.user.id = payload.id
-            state.user.name = payload.name
-            state.user.email = payload.email
-            state.user.photo = payload.photo
-            state.user.holiday = payload.holiday
-            state.user.rest = payload.rest
+            state.user = payload
         }
     },
     actions: {
@@ -35,21 +27,33 @@ export default {
             axios.post(`${host}/auth/login`, payload)
             .then(response => {
                 let token = response.data.access_token
-                localStorage.setItem('office_token', token)
-
-                commit('setUserToken', token)
 
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                 axios.post(`${host}/auth/me`, payload)
                     .then(response => {
-                        commit('setUser', response.data)
+                        let user = {
+                            id: response.data.id,
+                            name: response.data.name,
+                            email: response.data.email,
+                            photo: response.data.photo,
+                            token: token,
+                            holiday: response.data.holiday,
+                            rest: response.data.rest
+                        }
 
-                        localStorage.setItem('office_id', response.data.id)
-                        localStorage.setItem('office_name', response.data.name)
-                        localStorage.setItem('office_email', response.data.email)
-                        localStorage.setItem('office_photo', response.data.photo)
+                        commit('setUser', user)
 
-                        router.push('/dashboard')
+                        this.dispatch('setUserLocalStorage', {data: response.data, token: token})
+
+                        // check is there any original url
+                        let path = localStorage.getItem('original_url')
+
+                        if (path !== undefined && path !== null) {
+                            localStorage.removeItem('original_url')
+                            router.push(path)
+                        } else {
+                            router.push('dashboard')
+                        }
                     })
                     .catch(error => {
                         console.log(error)
@@ -57,25 +61,94 @@ export default {
             })
             .catch(error => {
                 console.log(error)
+
+                commit('setError', error.response.data.error)
             })
         },
-        autoSignIn ({commit}, payload) {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + payload
+        signUserOut ({commit}) {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('office_token')
 
-            axios.post(`${host}/auth/me`, payload)
-            .then(response => {
-                commit('setUser', response.data)
+            axios.post(`${host}/auth/logout`)
+                .then(response => {
+                    console.log(response)
 
-                localStorage.setItem('office_id', response.data.id)
-                localStorage.setItem('office_name', response.data.name)
-                localStorage.setItem('office_email', response.data.email)
-                localStorage.setItem('office_photo', response.data.photo)
+                    let user = {
+                        id: '',
+                        name: '',
+                        email: '',
+                        photo: '',
+                        token: '',
+                        holiday : '',
+                        rest: ''
+                    }
 
-                router.push('/dashboard')
-            })
-            .catch(error => {
-                console.log(error)
-            })
+                    commit('setUser', user)
+
+                    this.dispatch('removeUserLocalStorage')
+
+                    router.push('/')
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
+        autoSignIn ({commit}, payload = localStorage.getItem('office_token')) {
+
+            if (payload !== null && payload !== 'undefined') {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + payload
+
+                axios.post(`${host}/auth/me`, payload)
+                .then(response => {
+                    let user = {
+                        id: response.data.id,
+                        name: response.data.name,
+                        email: response.data.email,
+                        photo: response.data.photo,
+                        token: payload,
+                        holiday: response.data.holiday,
+                        rest: response.data.rest
+                    }
+
+                    commit('setUser', user)
+
+                    this.dispatch('setUserLocalStorage', {data: response.data, token: payload})
+
+                    router.push('/dashboard')
+                })
+                .catch(error => {
+                    console.log(error)
+
+                    let user = {
+                        id: '',
+                        name: '',
+                        email: '',
+                        photo: '',
+                        token: '',
+                        holiday : '',
+                        rest: ''
+                    }
+
+                    commit('setUser', user)
+
+                    this.dispatch('removeUserLocalStorage')
+
+                    router.push('/')
+                })
+            }
+        },
+        setUserLocalStorage ({commit}, payload) {
+            localStorage.setItem('office_id', payload.data.id)
+            localStorage.setItem('office_name', payload.data.name)
+            localStorage.setItem('office_email', payload.data.email)
+            localStorage.setItem('office_photo', payload.data.photo)
+            localStorage.setItem('office_token', payload.token)
+        },
+        removeUserLocalStorage ({commit}) {
+            localStorage.removeItem('office_id')
+            localStorage.removeItem('office_name')
+            localStorage.removeItem('office_email')
+            localStorage.removeItem('office_photo')
+            localStorage.removeItem('office_token')
         }
     }
 }
