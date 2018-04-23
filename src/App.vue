@@ -1,5 +1,7 @@
 <template>
     <v-app>
+        <sucessSnackbar></sucessSnackbar>
+
         <v-toolbar
           app
           :clipped-left="clipped"
@@ -108,6 +110,7 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions  } from 'vuex'
+import sucessSnackbar from './components/successSnackbar'
 
 export default {
     data () {
@@ -119,6 +122,9 @@ export default {
             }
         },
     name: 'App',
+    components: {
+        sucessSnackbar
+    },
     computed: {
         ...mapGetters([
             'user',
@@ -132,7 +138,7 @@ export default {
         },
     },
     mounted ()  {
-        this.$store.dispatch('autoSignIn')
+        this.$store.dispatch('refreshUser')
     },
     methods: {
         ...mapActions([

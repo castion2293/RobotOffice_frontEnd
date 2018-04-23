@@ -2,19 +2,37 @@ import router from "../../router";
 
 export default {
     state: {
+        schedule: {},
         holiday_type: []
     },
     getters: {
+        schedule (state) {
+            return state.schedule
+        },
         holidayType (state) {
             return state.holiday_type
         }
     },
     mutations: {
+        setSchedule (state, payload) {
+            state.schedule = payload
+        },
         setHolidayType (state, payload) {
             state.holiday_type = payload
         },
     },
     actions: {
+        getSchedule({commit}, payload) {
+            this.dispatch('setAuthorization')
+
+            axios.get(`${host}/schedule`)
+                .then(response => {
+                    commit('setSchedule', response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
         createSchedule({commit}, payload) {
             axios.post(`${host}/schedule`, payload)
                 .then(response => {
@@ -22,7 +40,13 @@ export default {
                         this.dispatch('refreshUser')
                     }, 1000)
 
+                    commit('setSuccessSnackbar', true)
+
                     router.push('/dashboard')
+
+                    setTimeout( () => {
+                        commit('setSuccessSnackbar', false)
+                    }, 3000)
                 })
                 .catch(error => {
                     this.dispatch('takeError', error.response.data.error);
