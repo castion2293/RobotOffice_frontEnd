@@ -20,7 +20,7 @@ export default {
     mutations: {
         setUser (state, payload) {
             state.user = payload
-        }
+        },
     },
     actions: {
         signUserIn ({commit}, payload) {
@@ -28,7 +28,8 @@ export default {
             .then(response => {
                 let token = response.data.access_token
 
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+                this.dispatch('setAuthorization', token)
+
                 axios.post(`${host}/auth/me`, payload)
                     .then(response => {
                         let user = {
@@ -66,7 +67,7 @@ export default {
             })
         },
         signUserOut ({commit}) {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('office_token')
+            this.dispatch('setAuthorization')
 
             axios.post(`${host}/auth/logout`)
                 .then(response => {
@@ -94,47 +95,46 @@ export default {
         },
         autoSignIn ({commit}, payload = localStorage.getItem('office_token')) {
 
-            if (payload !== null && payload !== 'undefined') {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + payload
+            this.dispatch('setAuthorization', payload)
 
-                axios.post(`${host}/auth/me`, payload)
-                .then(response => {
-                    let user = {
-                        id: response.data.id,
-                        name: response.data.name,
-                        email: response.data.email,
-                        photo: response.data.photo,
-                        token: payload,
-                        holiday: response.data.holiday,
-                        rest: response.data.rest
-                    }
+            axios.post(`${host}/auth/me`)
+            .then(response => {
+                let user = {
+                    id: response.data.id,
+                    name: response.data.name,
+                    email: response.data.email,
+                    photo: response.data.photo,
+                    token: payload,
+                    holiday: response.data.holiday,
+                    rest: response.data.rest
+                }
 
-                    commit('setUser', user)
+                commit('setUser', user)
 
-                    this.dispatch('setUserLocalStorage', {data: response.data, token: payload})
+                this.dispatch('setUserLocalStorage', {data: response.data, token: payload})
 
-                    router.push('/dashboard')
-                })
-                .catch(error => {
-                    console.log(error)
+                router.push('/dashboard')
+            })
+            .catch(error => {
+                console.log(error)
 
-                    let user = {
-                        id: '',
-                        name: '',
-                        email: '',
-                        photo: '',
-                        token: '',
-                        holiday : '',
-                        rest: ''
-                    }
+                let user = {
+                    id: '',
+                    name: '',
+                    email: '',
+                    photo: '',
+                    token: '',
+                    holiday : '',
+                    rest: ''
+                }
 
-                    commit('setUser', user)
+                commit('setUser', user)
 
-                    this.dispatch('removeUserLocalStorage')
+                this.dispatch('removeUserLocalStorage')
 
-                    router.push('/')
-                })
-            }
+                router.push('/')
+            })
+
         },
         setUserLocalStorage ({commit}, payload) {
             localStorage.setItem('office_id', payload.data.id)
@@ -149,6 +149,9 @@ export default {
             localStorage.removeItem('office_email')
             localStorage.removeItem('office_photo')
             localStorage.removeItem('office_token')
+        },
+        setAuthorization ({commit}, payload = localStorage.getItem('office_token')) {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + payload
         }
     }
 }

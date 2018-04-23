@@ -90,7 +90,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="deep-orange accent-3" flat @click.native="dialog = false"><strong>取消</strong></v-btn>
-                    <v-btn color="deep-orange accent-3" flat @click.native=""><strong>確認</strong></v-btn>
+                    <v-btn color="deep-orange accent-3" flat @click.native="post"><strong>確認</strong></v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -98,6 +98,8 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
+
     export default {
         name: "present",
         data () {
@@ -111,12 +113,27 @@
             }
         },
         methods: {
+            ...mapActions([
+                'createSchedule'
+            ]),
             confirm (type) {
                 this.work = this.chooseType(type)
                 this.date = this.chooseDate(this.date)
                 this.time = this.chooseTime(this.time)
 
                 this.dialog = !this.dialog
+            },
+            post () {
+                let data = {
+                    category: 'Present',
+                    work: this.work,
+                    date: this.date,
+                    time: this.time
+                }
+
+                this.createSchedule(data)
+
+                this.dialog = false
             },
             chooseType (type) {
                 if (type === 1) {

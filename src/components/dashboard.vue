@@ -6,7 +6,7 @@
         >
             <v-card>
                 <v-card-title primary-title>
-                    <div class="headline"><strong>2018年 4月</strong></div>
+                    <div class="headline"><strong>{{ year }}年 {{ month }}月</strong></div>
                     <v-spacer></v-spacer>
                     <v-btn @click="prev" color=""><v-icon>keyboard_arrow_left</v-icon></v-btn>
                     <v-btn @click="next" color=""><v-icon>keyboard_arrow_right</v-icon></v-btn>
@@ -54,17 +54,35 @@
                     },
                     height: 530,
                 },
+                date: new Date(),
+                year: '',
+                month: '',
             }
+        },
+        mounted () {
+            this.setYearMonth(this.date)
         },
         methods: {
             next() {
                 this.$refs.calendar.fireMethod('next')
+
+                this.date.setMonth(this.date.getMonth() + 1)
+
+                this.setYearMonth(this.date)
             },
             prev() {
                 this.$refs.calendar.fireMethod('prev')
+
+                this.date.setMonth(this.date.getMonth() - 1)
+
+                this.setYearMonth(this.date)
             },
             eventSelected (e) {
                 console.log(e)
+            },
+            setYearMonth (date) {
+                this.year = date.getFullYear()
+                this.month = date.getMonth() + 1
             }
         },
     }

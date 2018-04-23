@@ -6,6 +6,11 @@
                     <v-card-text>
                         <v-layout row wrap>
                             <v-flex md6 offset-md3>
+                                <p class="text-xs-center title mt-3 mb-5 grey--text text--darken-1">
+                                    <strong>剩餘 特休:{{ user.holiday }}小時 / 補休:{{ user.rest }}小時</strong>
+                                </p>
+                            </v-flex>
+                            <v-flex md6 offset-md3>
                                 <v-select
                                         :items="states"
                                         v-model="type"
@@ -143,7 +148,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="deep-orange accent-3" flat @click.native="dialog = false"><strong>取消</strong></v-btn>
-                    <v-btn color="deep-orange accent-3" flat @click.native=""><strong>確認</strong></v-btn>
+                    <v-btn color="deep-orange accent-3" flat @click.native="post"><strong>確認</strong></v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -173,9 +178,7 @@
         data () {
             return {
                 type: null,
-                states: [
-                    '事假', '病假', '補休', '特休'
-                ],
+                states: [],
                 date: null,
                 menu: false,
                 start_time: null,
@@ -188,16 +191,26 @@
         },
         computed: {
             ...mapGetters([
-                'error'
+                'user',
+                'error',
+                'holidayType'
             ]),
             errorMessage () {
                 return this.error !== null && this.error !== 'undefined'
             },
         },
+        mounted () {
+            this.$store.dispatch('getHolidayType')
+
+            setTimeout(() => {
+                this.states = this.holidayType
+            }, 1000)
+        },
         methods: {
             ...mapActions([
                 'takeError',
-                'clearError'
+                'clearError',
+                'createSchedule'
             ]),
             confirm () {
                 if (this.type !== null && this.date !== null && this.start_time !== null && this.end_time !== null ) {
@@ -212,6 +225,20 @@
                     this.takeError('請輸入 假別、日期及時間!!')
                 }
             },
+            post () {
+                let data = {
+                    category: 'Holiday',
+                    date: this.date,
+                    begin: this.start_time,
+                    end: this.end_time,
+                    type: this.type,
+                    hours: this.hours
+                }
+
+                this.createSchedule(data)
+
+                this.dialog = false
+            },
             getTimestamp(...timeSet) {
                 return new Date(1970,0,1,parseInt(timeSet[0][0]),parseInt(timeSet[0][1])).getTime()
             },
@@ -220,13 +247,27 @@
                     this.takeError('開始時間不可以晚於結束時間!!')
                     return false
                 } else {
-                    this.hours = this.checkNoonAndCountHours(start, end, (end - start) / 3600000)
+                    this.hours = this.setHours(start, end)
 
                     return true
                 }
-
             },
-            checkNoonAndCountHours (start, end, hours) {
+            setHours (start, end) {
+                let hours = ((end - start) / 3600000).toFixed(1)
+
+                let decimal = hours - Math.floor(hours)
+
+                if (decimal > 0.5) {
+                    hours = Math.ceil(hours)
+                } else if(decimal <= 0.5 && decimal > 0) {
+                    hours = Math.floor(hours) + 0.5
+                } else {
+                    hours = Math.floor(hours)
+                }
+
+                return this.checkNoonAndSubstractHours(start, end, hours)
+            },
+            checkNoonAndSubstractHours (start, end, hours) {
                 let noon_12 = new Date(1970,0,1,12,0).getTime()
                 let noon_13 = new Date(1970,0,1,13,0).getTime()
 

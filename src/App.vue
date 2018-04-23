@@ -5,6 +5,11 @@
           :clipped-left="clipped"
           class="w3-black"
         >
+            <v-toolbar-title v-show="userIsAuthenticated">
+                <v-btn flat @click="" to="/dashboard">
+                    <b class="title white--text"><strong>羅博特科技e化系統</strong></b>
+                </v-btn>
+            </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-title v-show="!userIsAuthenticated"  class="hidden-xs-only">
                 <v-btn flat @click="dialog = !dialog">

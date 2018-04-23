@@ -135,7 +135,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="deep-orange accent-3" flat @click.native="dialog = false"><strong>取消</strong></v-btn>
-                    <v-btn color="deep-orange accent-3" flat @click.native=""><strong>確認</strong></v-btn>
+                    <v-btn color="deep-orange accent-3" flat @click.native="post"><strong>確認</strong></v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -186,7 +186,8 @@
         methods: {
             ...mapActions([
                 'takeError',
-                'clearError'
+                'clearError',
+                'createSchedule'
             ]),
             confirm () {
                 if (this.location !== null && this.date !== null && this.start_time !== null && this.end_time !== null ) {
@@ -194,13 +195,27 @@
                     let end = this.getTimestamp(this.end_time.split(':'))
 
                     if (this.checkTime(start, end)) {
-                        this.hours = (end - start) / 3600000
+                        this.hours = this.setHours(start, end)
 
                         this.dialog = !this.dialog
                     }
                 } else {
                     this.takeError('請輸入 出差地點、日期及時間!!')
                 }
+            },
+            post () {
+                let data = {
+                    category: 'Trip',
+                    date: this.date,
+                    begin: this.start_time,
+                    end: this.end_time,
+                    location: this.location,
+                    hours: this.hours
+                }
+
+                this.createSchedule(data)
+
+                this.dialog = false
             },
             getTimestamp(...timeSet) {
                 return new Date(1970,0,1,parseInt(timeSet[0][0]),parseInt(timeSet[0][1])).getTime()
@@ -211,6 +226,19 @@
                     return false
                 }
                 return true
+            },
+            setHours (start, end) {
+                let hours = ((end - start) / 3600000).toFixed(1)
+
+                let decimal = hours - Math.floor(hours)
+
+                if (decimal > 0.5) {
+                    return Math.ceil(hours)
+                } else if(decimal <= 0.5 && decimal > 0) {
+                    return Math.floor(hours) + 0.5
+                } else {
+                    return Math.floor(hours)
+                }
             },
             dismissError () {
                 this.clearError()
