@@ -16,6 +16,20 @@
                 </v-container>
             </v-card>
         </v-container>
+
+        <v-dialog v-model="dialog" persistent max-width="500px">
+            <v-card>
+                <v-card-title class="title"><strong>刪除資料</strong></v-card-title>
+                <v-card-text>
+                    <p class="text-xs-center grey--text text--darken-2">{{ content.title }} 於 {{ content.date }} 從 {{ content.start }} </p>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="deep-orange accent-3" flat @click.native="dialog = false"><strong>取消</strong></v-btn>
+                    <v-btn color="deep-orange accent-3" flat @click.native="deleting"><strong>刪除</strong></v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-app>
 </template>
 
@@ -41,12 +55,9 @@
                 date: new Date(),
                 year: '',
                 month: '',
-                color: {
-                    present: '#4FC3F7',
-                    holiday: '#81C784',
-                    trip: '#FFA726',
-                    rest: '#EF5350'
-                }
+                dialog: false,
+                content: null,
+                schedule_id: ''
             }
         },
         computed: {
@@ -67,6 +78,7 @@
         methods: {
             ...mapActions([
                 'getSchedule',
+                'deleteSchedule'
             ]),
             fetch (year = null, month = null) {
                 let data = {
@@ -78,29 +90,50 @@
             },
             next() {
                 this.$refs.calendar.fireMethod('next')
-
-                this.fetch(this.year, this.month + 1)
-
                 this.date.setMonth(this.date.getMonth() + 1)
-
                 this.setYearMonth(this.date)
+
+                this.fetch(this.year, this.month)
+
             },
             prev() {
                 this.$refs.calendar.fireMethod('prev')
-
-                this.fetch(this.year, this.month - 1)
-
                 this.date.setMonth(this.date.getMonth() - 1)
-
                 this.setYearMonth(this.date)
-            },
-            eventSelected (e) {
-                console.log(e)
+
+                this.fetch(this.year, this.month)
             },
             setYearMonth (date) {
                 this.year = date.getFullYear()
                 this.month = date.getMonth() + 1
+            },
+            eventSelected (e) {
+                // let title = e.title.split('~')[0]
+                // let date = e.start._i.split('T')[0]
+                // let start = e.start._i.split('T')[1]
+                // let end = e.end._i.split('T')[1]
+
+                this.content = {
+                    title: e.title.split('~')[0],
+                    date: e.start._i.split('T')[0],
+                    start: e.start._i.split('T')[1],
+                    end: e.end._i.split('T')[1]
+                }
+
+                this.schedule_id = e.id
+
+                this.dialog = !this.dialog
+            },
+            deleting () {
+                this.deleteSchedule(this.schedule_id)
+
+                this.dialog = !this.dialog
+
+                setTimeout(() => {
+                    this.fetch(this.year, this.month)
+                }, 1000)
             }
+
         },
     }
 </script>

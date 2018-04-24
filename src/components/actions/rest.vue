@@ -118,7 +118,7 @@
                 <v-card-media
                         class="white--text"
                         height="200px"
-                        src="http://static.asiawebdirect.com/m/bangkok/portals/bangkok-com/homepage/information/airport/allParagraphs/BucketComponent/ListingContainer/02/image/bangkok-airport.jpg"
+                        src="https://www.triumph30.org/wp-content/uploads/2016/12/cci13a.jpg"
                 ></v-card-media>
                 <v-card-text>
                     <v-container grid-list-md>

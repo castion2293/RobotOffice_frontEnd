@@ -43,6 +43,10 @@
                             <v-icon class="mr-3" color="deep-orange accent-3">note_add</v-icon>
                             <v-list-tile-title class="mr-3"><strong>補休</strong></v-list-tile-title>
                         </v-list-tile>
+                        <v-list-tile @click="" to="/actions/statistic">
+                            <v-icon class="mr-3" color="deep-orange accent-3">equalizer</v-icon>
+                            <v-list-tile-title class="mr-3"><strong>統計</strong></v-list-tile-title>
+                        </v-list-tile>
                         <v-list-tile @click="logout" to="">
                             <v-icon class="mr-3" color="deep-orange accent-3">keyboard_tab</v-icon>
                             <v-list-tile-title class="mr-3"><strong>登出</strong></v-list-tile-title>

@@ -52,6 +52,23 @@ export default {
                     this.dispatch('takeError', error.response.data.error);
                 })
         },
+        deleteSchedule({commit}, payload) {
+            axios.delete(`${host}/schedule/${payload}`)
+                .then(response => {
+                    setTimeout(() => {
+                        this.dispatch('refreshUser')
+                    }, 1000)
+
+                    commit('setSuccessSnackbar', true)
+
+                    setTimeout( () => {
+                        commit('setSuccessSnackbar', false)
+                    }, 3000)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        },
         getHolidayType({commit}) {
             axios.get(`${host}/holiday/type`)
                 .then(response => {
