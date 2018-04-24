@@ -25,7 +25,7 @@ export default {
         getSchedule({commit}, payload) {
             this.dispatch('setAuthorization')
 
-            axios.get(`${host}/schedule`)
+            axios.get(`${host}/schedule?year=${payload.year}&month=${payload.month}`)
                 .then(response => {
                     commit('setSchedule', response.data)
                 })

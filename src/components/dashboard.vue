@@ -20,32 +20,13 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
 
     export default {
         name: "dashboard",
         data() {
             return {
-                events: [
-                    // {
-                    //     title: '出席',
-                    //     start: '2018-04-17T08:30:00',
-                    //     end: '2018-04-17T17:30:00',
-                    //     color: '#4FC3F7',
-                    // },
-                    // {
-                    //     title: '請假',
-                    //     start: '2018-04-07T08:30:00',
-                    //     end: '2018-04-07T17:30:00',
-                    //     color: '#81C784'
-                    // },
-                    // {
-                    //     title: '出差',
-                    //     start: '2018-04-16T08:30:00',
-                    //     end: '2018-04-16T17:30:00',
-                    //     color: '#FFA726'
-                    // },
-                ],
+                events: [],
                 config: {
                     defaultView: 'month',
                     locale: 'zh-cn',
@@ -73,18 +54,32 @@
                'schedule'
             ]),
         },
+        watch: {
+            schedule () {
+                this.events = this.schedule
+            }
+        },
         mounted () {
-            this.$store.dispatch('getSchedule')
+            this.fetch()
 
             this.setYearMonth(this.date)
-
-            setTimeout(() => {
-                this.events = this.schedule
-            }, 3000)
         },
         methods: {
+            ...mapActions([
+                'getSchedule',
+            ]),
+            fetch (year = null, month = null) {
+                let data = {
+                    year: !!year ? year : new Date().getFullYear(),
+                    month: !!month ? month : new Date().getMonth() + 1
+                }
+
+                this.getSchedule(data)
+            },
             next() {
                 this.$refs.calendar.fireMethod('next')
+
+                this.fetch(this.year, this.month + 1)
 
                 this.date.setMonth(this.date.getMonth() + 1)
 
@@ -92,6 +87,8 @@
             },
             prev() {
                 this.$refs.calendar.fireMethod('prev')
+
+                this.fetch(this.year, this.month - 1)
 
                 this.date.setMonth(this.date.getMonth() - 1)
 
