@@ -3,7 +3,11 @@ import router from "../../router";
 export default {
     state: {
         schedule: {},
-        holiday_type: []
+        holiday_type: [],
+        present: {},
+        holiday: {},
+        trip: {},
+        rest: {}
     },
     getters: {
         schedule (state) {
@@ -11,6 +15,18 @@ export default {
         },
         holidayType (state) {
             return state.holiday_type
+        },
+        present (state) {
+            return state.present
+        },
+        holiday (state) {
+            return state.holiday
+        },
+        trip (state) {
+            return state.trip
+        },
+        rest (state) {
+            return state.rest
         }
     },
     mutations: {
@@ -20,12 +36,24 @@ export default {
         setHolidayType (state, payload) {
             state.holiday_type = payload
         },
+        setPresent (state, payload) {
+            state.present = payload
+        },
+        setHoliday (state, payload) {
+            state.holiday = payload
+        },
+        setTrip (state, payload) {
+            state.trip = payload
+        },
+        setRest (state, payload) {
+            state.rest = payload
+        }
     },
     actions: {
         getSchedule({commit}, payload) {
             this.dispatch('setAuthorization')
 
-            axios.get(`${host}/schedule?year=${payload.year}&month=${payload.month}`)
+            axios.get(`${host}/schedule?year=${payload.year}&month=${payload.month}&method=${payload.method}`)
                 .then(response => {
                     commit('setSchedule', response.data)
                 })
@@ -88,6 +116,18 @@ export default {
                 .catch(error => {
                     console.log(error)
                 })
+        },
+        getAnalysisData ({commit}, payload) {
+            this.dispatch('setAuthorization')
+
+            axios.get(`${host}/schedule?year=${payload.year}&type=${payload.type}&method=${payload.method}`)
+            .then(response => {
+                commit('set' + payload.type, response.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
         }
+
     }
 }

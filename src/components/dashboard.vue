@@ -21,7 +21,7 @@
             <v-card>
                 <v-card-title class="title"><strong>刪除資料</strong></v-card-title>
                 <v-card-text>
-                    <p class="text-xs-center grey--text text--darken-2">{{ content.title }} 於 {{ content.date }} 從 {{ content.start }} </p>
+                    <p class="text-xs-center grey--text text--darken-2">{{ content.title }} 於 {{ content.date }} 從 {{ content.start }} 至 {{ content.end }} </p>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -55,8 +55,14 @@
                 date: new Date(),
                 year: '',
                 month: '',
+                method: 'Calendar',
                 dialog: false,
-                content: null,
+                content: {
+                    title: '',
+                    date: '',
+                    start: '',
+                    end: ''
+                },
                 schedule_id: ''
             }
         },
@@ -82,8 +88,9 @@
             ]),
             fetch (year = null, month = null) {
                 let data = {
-                    year: !!year ? year : new Date().getFullYear(),
-                    month: !!month ? month : new Date().getMonth() + 1
+                    year: !!year ? year : this.date.getFullYear(),
+                    month: !!month ? month : this.date.getMonth() + 1,
+                    method: this.method
                 }
 
                 this.getSchedule(data)
@@ -108,16 +115,11 @@
                 this.month = date.getMonth() + 1
             },
             eventSelected (e) {
-                // let title = e.title.split('~')[0]
-                // let date = e.start._i.split('T')[0]
-                // let start = e.start._i.split('T')[1]
-                // let end = e.end._i.split('T')[1]
-
                 this.content = {
                     title: e.title.split('~')[0],
                     date: e.start._i.split('T')[0],
                     start: e.start._i.split('T')[1],
-                    end: e.end._i.split('T')[1]
+                    end: (!!e.end) ? e.end._i.split('T')[1] : null
                 }
 
                 this.schedule_id = e.id
