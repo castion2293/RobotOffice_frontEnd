@@ -13,7 +13,7 @@
                 </v-btn>
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-toolbar-title v-show="!userIsAuthenticated"  class="hidden-xs-only">
+            <v-toolbar-title v-show="!userIsAuthenticated">
                 <v-btn flat @click="dialog = !dialog">
                     <v-icon left class="white--text">exit_to_app</v-icon>
                     <b class="subheading white--text"><strong>登入</strong></b>

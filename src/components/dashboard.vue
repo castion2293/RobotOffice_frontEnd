@@ -5,12 +5,21 @@
                 grid-list-lg
         >
             <v-card>
-                <v-card-title primary-title>
+                <v-card-title primary-title class="hidden-xs-only">
                     <div class="headline"><strong>{{ year }}年 {{ month }}月</strong></div>
                     <v-spacer></v-spacer>
                     <v-btn @click="prev" color=""><v-icon>keyboard_arrow_left</v-icon></v-btn>
                     <v-btn @click="next" color=""><v-icon>keyboard_arrow_right</v-icon></v-btn>
                 </v-card-title>
+                <div class="hidden-sm-and-up text-xs-center">
+                    <div class="pt-2">
+                        <span class="headline text-xs-center"><strong>{{ year }}年 {{ month }}月</strong></span>
+                    </div>
+                    <div class="mt-3">
+                        <v-btn @click="prev" color=""><v-icon>keyboard_arrow_left</v-icon></v-btn>
+                        <v-btn @click="next" color=""><v-icon>keyboard_arrow_right</v-icon></v-btn>
+                    </div>
+                </div>
                 <v-container fluid>
                     <full-calendar :events="events" :config="config" ref="calendar" @event-selected="eventSelected"></full-calendar>
                 </v-container>

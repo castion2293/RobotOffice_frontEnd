@@ -6,7 +6,10 @@
                     <v-card-text>
                         <v-layout row wrap>
                             <v-flex md6 offset-md3>
-                                <p class="text-xs-center title mt-3 mb-5 grey--text text--darken-1">
+                                <p class="text-xs-center title mt-3 mb-5 grey--text text--darken-1 hidden-xs-only">
+                                    <strong>剩餘 特休:{{ user.holiday }}小時 / 補休:{{ user.rest }}小時</strong>
+                                </p>
+                                <p class="text-xs-center subheading title mt-3 mb-5 grey--text text--darken-1 hidden-sm-and-up">
                                     <strong>剩餘 特休:{{ user.holiday }}小時 / 補休:{{ user.rest }}小時</strong>
                                 </p>
                             </v-flex>
@@ -49,10 +52,10 @@
 
                             <v-card-text>
                                 <v-layout>
-                                    <v-flex md1 class="pt-3">
+                                    <v-flex md1 sm1 xs2 class="pt-3">
                                         <span><strong>從</strong></span>
                                     </v-flex>
-                                    <v-flex md5>
+                                    <v-flex md5 sm5 xs4>
                                         <v-menu
                                                 ref="menu2"
                                                 lazy
@@ -80,10 +83,10 @@
                                             ></v-time-picker>
                                         </v-menu>
                                     </v-flex>
-                                    <v-flex md1 class="pt-3 pl-2">
+                                    <v-flex md1 sm1 xs2 class="pt-3 pl-2">
                                         <span><strong>至</strong></span>
                                     </v-flex>
-                                    <v-flex md5>
+                                    <v-flex md5 sm5 xs4>
                                         <v-menu
                                                 ref="menu3"
                                                 lazy
@@ -116,8 +119,12 @@
                         </v-layout>
                     </v-card-text>
 
-                    <v-card-text class="text-xs-center">
+                    <v-card-text class="text-xs-center hidden-xs-only">
                         <v-btn @click="confirm" color="deep-orange accent-3" class="title mr-5" dark><strong>送出</strong></v-btn>
+                    </v-card-text>
+
+                    <v-card-text class="text-xs-center hidden-sm-and-up">
+                        <v-btn block @click="confirm" color="deep-orange accent-3" class="title mr-5" dark><strong>送出</strong></v-btn>
                     </v-card-text>
                 </v-card>
             </v-flex>

@@ -3,6 +3,7 @@
         <div class="bgimg-1">
             <div class="bg-title-1 text-xs-center">
                 <h1 class="white--text mb-3 text-xs-center display-2 hidden-xs-only"><b>羅博特科技e化系統</b></h1>
+                <h1 class="white--text mb-3 text-xs-center display-1 hidden-sm-and-up"><b>羅博特科技e化系統</b></h1>
             </div>
         </div>
     </v-app>

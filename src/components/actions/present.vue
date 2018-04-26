@@ -64,9 +64,13 @@
                             </v-flex>
                         </v-layout>
                     </v-card-text>
-                    <v-card-text class="text-xs-center">
+                    <v-card-text class="text-xs-center hidden-xs-only">
                         <v-btn @click="confirm(1)" color="deep-orange accent-3" class="title mr-5" dark><strong>打卡上班</strong></v-btn>
                         <v-btn @click="confirm(2)" color="cyan darken-3" class="title ml-5" dark><strong>打卡下班</strong></v-btn>
+                    </v-card-text>
+                    <v-card-text>
+                        <v-btn block @click="confirm(1)" color="deep-orange accent-3" class="title" dark><strong>打卡上班</strong></v-btn>
+                        <v-btn block @click="confirm(2)" color="cyan darken-3" class="title mt-4" dark><strong>打卡下班</strong></v-btn>
                     </v-card-text>
                 </v-card>
             </v-flex>
