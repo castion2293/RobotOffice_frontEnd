@@ -1,14 +1,69 @@
 <template>
     <v-app>
-        <h1>{{ present }}</h1>
-        <h1>{{ holiday }}</h1>
-        <h1>{{ trip }}</h1>
-        <h1>{{ rest }}</h1>
+        <v-container
+                style="min-height: 0;"
+                grid-list-lg
+        >
+            <v-layout row wrap>
+                <v-flex md6 sm12 xs12>
+                    <v-card color="light-blue lighten-2" class="white--text">
+                        <v-card-title primary-title class="headline">
+                            <strong>出席</strong>
+                            <v-spacer></v-spacer>
+                            <strong>天數: {{ present.count }}天</strong>
+                        </v-card-title>
+                        <v-card class="white">
+                            <presentList></presentList>
+                        </v-card>
+                    </v-card>
+                </v-flex>
+                <v-flex md6 sm12 xs12>
+                    <v-card color="green lighten-2" class="white--text">
+                        <v-card-title primary-title class="headline">
+                            <strong>請假</strong>
+                            <v-spacer></v-spacer>
+                            <strong>總時數: {{ holiday.hours_count }}小時</strong>
+                        </v-card-title>
+                        <v-card class="white">
+                            <holidayList></holidayList>
+                        </v-card>
+                    </v-card>
+                </v-flex>
+                <v-flex md6 sm12 xs12>
+                    <v-card color="orange lighten-1" class="white--text">
+                        <v-card-title primary-title class="headline">
+                            <strong>出差</strong>
+                            <v-spacer></v-spacer>
+                            <strong>總時數: {{ trip.hours_count }}小時</strong>
+                        </v-card-title>
+                        <v-card class="white">
+                            <tripList></tripList>
+                        </v-card>
+                    </v-card>
+                </v-flex>
+                <v-flex md6 sm12 xs12>
+                    <v-card color="red lighten-1" class="white--text">
+                        <v-card-title primary-title class="headline">
+                            <strong>補休</strong>
+                            <v-spacer></v-spacer>
+                            <strong>總時數: {{ rest.hours_count }}小時</strong>
+                        </v-card-title>
+                        <v-card class="white">
+                            <restList></restList>
+                        </v-card>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+        </v-container>
     </v-app>
 </template>
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
+    import presentList from '../lists/presentList'
+    import holidayList from '../lists/holidayList'
+    import tripList from '../lists/tripList'
+    import restList from '../lists/restList'
 
     export default {
         name: "statistic",
@@ -16,7 +71,14 @@
             return {
                 date: new Date(),
                 year: '',
+                present_data: []
             }
+        },
+        components: {
+            presentList,
+            holidayList,
+            tripList,
+            restList
         },
         computed: {
             ...mapGetters([
@@ -25,6 +87,20 @@
                 'trip',
                 'rest'
             ]),
+        },
+        watch: {
+            present () {
+                Event.fire('presentData', this.present.data)
+            },
+            holiday () {
+                Event.fire('holidayData', this.holiday.data)
+            },
+            trip () {
+                Event.fire('tripData', this.trip.data)
+            },
+            rest () {
+                Event.fire('restData', this.rest.data)
+            }
         },
         mounted () {
             this.fetch()
