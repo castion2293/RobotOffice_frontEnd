@@ -136,6 +136,70 @@ export default {
             })
 
         },
+        resetUserProfile ({commit}, payload) {
+            this.dispatch('setAuthorization')
+
+            axios.post(`${host}/reset/profile`, payload)
+                .then(response => {
+                    console.log(response)
+
+                    let user = {
+                        id: response.data.id,
+                        name: response.data.name,
+                        email: response.data.email,
+                        token: localStorage.getItem('office_token'),
+                        holiday: response.data.holiday,
+                        rest: response.data.rest
+                    }
+
+                    commit('setUser', user)
+
+                    this.dispatch('setUserLocalStorage', {data: user, token: user.token})
+
+                    commit('setSuccessSnackbar', true)
+
+                    setTimeout( () => {
+                        commit('setSuccessSnackbar', false)
+                    }, 3000)
+                })
+                .catch(error => {
+                    console.log(error)
+
+                    commit('setError', error.response.data.error)
+                })
+        },
+        resetUserPassword ({commit}, payload) {
+            this.dispatch('setAuthorization')
+
+            axios.post(host + '/reset/password', payload)
+                .then(response => {
+                    console.log(response)
+
+                    let user = {
+                        id: response.data.id,
+                        name: response.data.name,
+                        email: response.data.email,
+                        token: localStorage.getItem('office_token'),
+                        holiday: response.data.holiday,
+                        rest: response.data.rest
+                    }
+
+                    commit('setUser', user)
+
+                    this.dispatch('setUserLocalStorage', {data: user, token: user.token})
+
+                    commit('setSuccessSnackbar', true)
+
+                    setTimeout( () => {
+                        commit('setSuccessSnackbar', false)
+                    }, 3000)
+                })
+                .catch(error => {
+                    console.log(error.response.data.message)
+
+                    commit('setError', error.response.data.message)
+                })
+        },
         setUserLocalStorage ({commit}, payload) {
             localStorage.setItem('office_id', payload.data.id)
             localStorage.setItem('office_name', payload.data.name)

@@ -49,7 +49,9 @@
         name: "dashboard",
         data() {
             return {
-                events: [],
+                events: [
+
+                ],
                 config: {
                     defaultView: 'month',
                     locale: 'zh-cn',

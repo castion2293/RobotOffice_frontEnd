@@ -77,7 +77,7 @@ export default {
                     }, 3000)
                 })
                 .catch(error => {
-                    this.dispatch('takeError', error.response.data.error);
+                    this.dispatch('takeError', error.response.data.message);
                 })
         },
         deleteSchedule({commit}, payload) {

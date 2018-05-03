@@ -9,6 +9,7 @@ import holiday from '../components/actions/holiday'
 import trip from '../components/actions/trip'
 import rest from '../components/actions/rest'
 import statistic from '../components/actions/statistic'
+import settings from '../components/actions/settings'
 
 Vue.use(Router)
 
@@ -54,6 +55,12 @@ export default new Router({
             path: '/actions/statistic',
             name: 'statistic',
             component: statistic,
+            beforeEnter: AuthGuard
+        },
+        {
+            path: '/actions/settings',
+            name: 'settings',
+            component: settings,
             beforeEnter: AuthGuard
         }
     ],

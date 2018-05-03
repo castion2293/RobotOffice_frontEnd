@@ -122,7 +122,7 @@
                 <v-card-media
                         class="white--text"
                         height="200px"
-                        src="https://www.triumph30.org/wp-content/uploads/2016/12/cci13a.jpg"
+                        src="http://www.south-africa-info.co.za/info/towns/403/images/bottom_images/8.jpg"
                 ></v-card-media>
                 <v-card-text>
                     <v-container grid-list-md>
