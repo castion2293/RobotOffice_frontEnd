@@ -5,7 +5,7 @@
         <v-toolbar
           app
           :clipped-left="clipped"
-          class="w3-black"
+          :class="background"
         >
             <v-toolbar-title v-show="userIsAuthenticated">
                 <v-btn flat @click="" to="/dashboard">
@@ -58,11 +58,17 @@
                     </v-list>
                 </v-menu>
             </v-toolbar-title>
-
         </v-toolbar>
-        <v-content class="my-content">
-          <router-view/>
-        </v-content>
+
+        <div v-if="userIsAuthenticated">
+            <v-content>
+                <router-view/>
+            </v-content>
+        </div>
+
+        <div v-else>
+            <router-view/>
+        </div>
 
         <v-dialog v-model="dialog" persistent max-width="500px">
             <v-card>
@@ -144,6 +150,13 @@ export default {
         errorMessage () {
             return this.error !== null && this.error !== 'undefined'
         },
+        background () {
+            if (this.userIsAuthenticated) {
+                return 'w3-black'
+            }
+
+            return 'w3-transparent'
+        }
     },
     mounted ()  {
         this.$store.dispatch('refreshUser')
@@ -173,7 +186,5 @@ export default {
 </script>
 
 <style scoped>
-    .my-content {
-        position: relative;
-    }
+
 </style>

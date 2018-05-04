@@ -6,8 +6,8 @@ export default {
             id: '',
             name: '',
             email: '',
-            photo: '',
             token: '',
+            holiday_days: '',
             holiday: '',
             rest: ''
         },
@@ -32,18 +32,9 @@ export default {
 
                 axios.post(`${host}/auth/me`, payload)
                     .then(response => {
-                        let user = {
-                            id: response.data.id,
-                            name: response.data.name,
-                            email: response.data.email,
-                            photo: response.data.photo,
-                            token: token,
-                            holiday: response.data.holiday,
-                            rest: response.data.rest
-                        }
 
-                        commit('setUser', user)
-
+                        this.dispatch('initialUser', {data: response.data, token: token})
+                        
                         this.dispatch('setUserLocalStorage', {data: response.data, token: token})
 
                         // check is there any original url
@@ -73,17 +64,7 @@ export default {
                 .then(response => {
                     console.log(response)
 
-                    let user = {
-                        id: '',
-                        name: '',
-                        email: '',
-                        photo: '',
-                        token: '',
-                        holiday : '',
-                        rest: ''
-                    }
-
-                    commit('setUser', user)
+                    this.dispatch('initialUser', {data: '', token : ''})
 
                     this.dispatch('removeUserLocalStorage')
 
@@ -99,17 +80,8 @@ export default {
 
             axios.post(`${host}/auth/me`)
             .then(response => {
-                let user = {
-                    id: response.data.id,
-                    name: response.data.name,
-                    email: response.data.email,
-                    photo: response.data.photo,
-                    token: payload,
-                    holiday: response.data.holiday,
-                    rest: response.data.rest
-                }
 
-                commit('setUser', user)
+                this.dispatch('initialUser', {data: response.data, token: payload})
 
                 this.dispatch('setUserLocalStorage', {data: response.data, token: payload})
 
@@ -118,17 +90,7 @@ export default {
             .catch(error => {
                 console.log(error)
 
-                let user = {
-                    id: '',
-                    name: '',
-                    email: '',
-                    photo: '',
-                    token: '',
-                    holiday : '',
-                    rest: ''
-                }
-
-                commit('setUser', user)
+                this.dispatch('initialUser', {data: '', token : ''})
 
                 this.dispatch('removeUserLocalStorage')
 
@@ -143,18 +105,9 @@ export default {
                 .then(response => {
                     console.log(response)
 
-                    let user = {
-                        id: response.data.id,
-                        name: response.data.name,
-                        email: response.data.email,
-                        token: localStorage.getItem('office_token'),
-                        holiday: response.data.holiday,
-                        rest: response.data.rest
-                    }
+                    this.dispatch('initialUser', {data: response.data, token: localStorage.getItem('office_token')})
 
-                    commit('setUser', user)
-
-                    this.dispatch('setUserLocalStorage', {data: user, token: user.token})
+                    this.dispatch('setUserLocalStorage', {data: response.data, token: localStorage.getItem('office_token')})
 
                     commit('setSuccessSnackbar', true)
 
@@ -175,18 +128,9 @@ export default {
                 .then(response => {
                     console.log(response)
 
-                    let user = {
-                        id: response.data.id,
-                        name: response.data.name,
-                        email: response.data.email,
-                        token: localStorage.getItem('office_token'),
-                        holiday: response.data.holiday,
-                        rest: response.data.rest
-                    }
+                    this.dispatch('initialUser', {data: response.data, token: localStorage.getItem('office_token')})
 
-                    commit('setUser', user)
-
-                    this.dispatch('setUserLocalStorage', {data: user, token: user.token})
+                    this.dispatch('setUserLocalStorage', {data: response.data, token: localStorage.getItem('office_token')})
 
                     commit('setSuccessSnackbar', true)
 
@@ -200,18 +144,29 @@ export default {
                     commit('setError', error.response.data.message)
                 })
         },
+        initialUser ({commit}, payload) {
+            let user = {
+                id: payload.data.id,
+                name: payload.data.name,
+                email: payload.data.email,
+                token: payload.token,
+                holiday_days: payload.data.holiday_days,
+                holiday: payload.data.holiday,
+                rest: payload.data.rest
+            }
+
+            commit('setUser', user)
+        },
         setUserLocalStorage ({commit}, payload) {
             localStorage.setItem('office_id', payload.data.id)
             localStorage.setItem('office_name', payload.data.name)
             localStorage.setItem('office_email', payload.data.email)
-            localStorage.setItem('office_photo', payload.data.photo)
             localStorage.setItem('office_token', payload.token)
         },
         removeUserLocalStorage ({commit}) {
             localStorage.removeItem('office_id')
             localStorage.removeItem('office_name')
             localStorage.removeItem('office_email')
-            localStorage.removeItem('office_photo')
             localStorage.removeItem('office_token')
         },
         setAuthorization ({commit}, payload = localStorage.getItem('office_token')) {
