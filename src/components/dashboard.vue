@@ -88,6 +88,8 @@
             }
         },
         mounted () {
+            this.$store.dispatch('takeLoading', true)
+
             this.fetch()
 
             this.setYearMonth(this.date)
@@ -107,6 +109,8 @@
                 this.getSchedule(data)
             },
             next() {
+                this.$store.dispatch('takeLoading', true)
+
                 this.$refs.calendar.fireMethod('next')
                 this.date.setMonth(this.date.getMonth() + 1)
                 this.setYearMonth(this.date)
@@ -115,6 +119,8 @@
 
             },
             prev() {
+                this.$store.dispatch('takeLoading', true)
+
                 this.$refs.calendar.fireMethod('prev')
                 this.date.setMonth(this.date.getMonth() - 1)
                 this.setYearMonth(this.date)

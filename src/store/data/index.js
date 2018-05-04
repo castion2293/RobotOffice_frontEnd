@@ -56,6 +56,8 @@ export default {
             axios.get(`${host}/schedule?year=${payload.year}&month=${payload.month}&method=${payload.method}`)
                 .then(response => {
                     commit('setSchedule', response.data)
+
+                    commit('setLoading', false)
                 })
                 .catch(error => {
                     console.log(error)

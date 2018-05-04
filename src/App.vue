@@ -1,5 +1,6 @@
 <template>
     <v-app>
+        <loader v-if="loading"></loader>
         <sucessSnackbar></sucessSnackbar>
 
         <v-toolbar
@@ -21,7 +22,7 @@
             </v-toolbar-title>
 
             <v-toolbar-title v-show="userIsAuthenticated">
-                <span class="hidden-xs-only">{{ user.name }}</span>
+                <span class="hidden-xs-only white--text">{{ user.name }}</span>
                 <v-menu offset-y>
                     <v-btn icon slot="activator" dark>
                         <v-icon>keyboard_arrow_down</v-icon>
@@ -124,6 +125,7 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions  } from 'vuex'
+import loader from './components/loader'
 import sucessSnackbar from './components/successSnackbar'
 
 export default {
@@ -137,12 +139,14 @@ export default {
         },
     name: 'App',
     components: {
-        sucessSnackbar
+        sucessSnackbar,
+        loader
     },
     computed: {
         ...mapGetters([
             'user',
-            'error'
+            'error',
+            'loading'
         ]),
         userIsAuthenticated () {
             return this.user.token !== null && this.user.token !== 'undefined' && this.user.token !== ''
@@ -152,10 +156,10 @@ export default {
         },
         background () {
             if (this.userIsAuthenticated) {
-                return 'w3-black'
+                return 'black'
             }
 
-            return 'w3-transparent'
+            return 'transparent'
         }
     },
     mounted ()  {

@@ -34,7 +34,7 @@ export default {
                     .then(response => {
 
                         this.dispatch('initialUser', {data: response.data, token: token})
-                        
+
                         this.dispatch('setUserLocalStorage', {data: response.data, token: token})
 
                         // check is there any original url

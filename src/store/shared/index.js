@@ -1,11 +1,15 @@
 export default {
     state: {
         error: null,
+        loading: false,
         successSnackbar: false,
     },
     getters: {
         error (state) {
             return state.error
+        },
+        loading (state) {
+            return state.loading
         },
         successSnackbar (state) {
             return state.successSnackbar
@@ -14,6 +18,9 @@ export default {
     mutations: {
         setError (state, payload) {
             state.error = payload
+        },
+        setLoading (state, payload) {
+            state.loading = payload
         },
         setSuccessSnackbar (state, payload) {
             state.successSnackbar = payload
@@ -26,5 +33,8 @@ export default {
         takeError ({commit}, payload) {
             commit('setError', payload)
         },
+        takeLoading({commit}, payload) {
+            commit('setLoading', payload)
+        }
     }
 }

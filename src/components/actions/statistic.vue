@@ -100,9 +100,14 @@
             },
             rest () {
                 Event.fire('restData', this.rest.data)
+
+                // close loader
+                this.$store.dispatch('takeLoading', false)
             }
         },
         mounted () {
+            this.$store.dispatch('takeLoading', true)
+
             this.fetch()
         },
         methods: {
