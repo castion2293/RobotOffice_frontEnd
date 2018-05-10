@@ -122,7 +122,7 @@
                 <v-card-media
                         class="white--text"
                         height="200px"
-                        src="http://static.asiawebdirect.com/m/bangkok/portals/bangkok-com/homepage/information/airport/allParagraphs/BucketComponent/ListingContainer/02/image/bangkok-airport.jpg"
+                        src="https://s3.amazonaws.com/robot-office-pics/2018050805.jpg"
                 ></v-card-media>
                 <v-card-text>
                     <v-container grid-list-md>

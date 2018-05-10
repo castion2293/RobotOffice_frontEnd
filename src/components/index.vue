@@ -26,7 +26,7 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        background-image: url('https://images.adsttc.com/media/images/591a/5af2/e58e/ced8/ef00/009d/large_jpg/6.jpg?1494899430');
+        background-image: url('https://s3.amazonaws.com/robot-office-pics/2018050801.jpg');
         min-height: 100vh;
     }
 

@@ -122,7 +122,7 @@
                 <v-card-media
                         class="white--text"
                         height="200px"
-                        src="http://www.south-africa-info.co.za/info/towns/403/images/bottom_images/8.jpg"
+                        src="https://s3.amazonaws.com/robot-office-pics/2018050806.jpg"
                 ></v-card-media>
                 <v-card-text>
                     <v-container grid-list-md>

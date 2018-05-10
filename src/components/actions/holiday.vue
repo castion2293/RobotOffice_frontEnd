@@ -135,7 +135,7 @@
                 <v-card-media
                         class="white--text"
                         height="200px"
-                        src="https://image.freepik.com/vrije-photo/houten-bureau-tafel-met-laptop-computer-laptop-potlood-cactus-en-kopje-koffie-bovenaanzicht-met-kopie-ruimte_7188-751.jpg"
+                        src="https://s3.amazonaws.com/robot-office-pics/2018050804.jpg"
                 ></v-card-media>
                 <v-card-text>
                     <v-container grid-list-md>

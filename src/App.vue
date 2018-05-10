@@ -76,7 +76,7 @@
                 <v-card-media
                         class="white--text"
                         height="200px"
-                        src="https://www.intelligent.com/wp-content/uploads/2013/06/chapter_pic04-1.jpg"
+                        src="https://s3.amazonaws.com/robot-office-pics/2018050802.jpg"
                 >
                     <v-container fill-height fluid>
                         <v-layout fill-height>

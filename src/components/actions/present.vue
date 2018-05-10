@@ -81,7 +81,7 @@
                 <v-card-media
                         class="white--text"
                         height="200px"
-                        src="http://www.killahbeez.com/wordpress/wp-content/uploads/2010/09/f1.jpg"
+                        src="https://s3.amazonaws.com/robot-office-pics/2018050803.jpg"
                 ></v-card-media>
                 <v-card-text>
                     <v-container grid-list-md>
